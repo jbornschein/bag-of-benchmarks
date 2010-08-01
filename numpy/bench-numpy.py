@@ -22,7 +22,7 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-n", "--nbytes", dest="nbytes", type="int", default=64,
                     help="Size of input array in MiB [default=64]")
-parser.add_option("-t", "--dtype", dest="dtype", default="float32",
+parser.add_option("-t", "--dtype", dest="dtype", default="float64",
                     help="Datatype to be benchmarked")
 
 
