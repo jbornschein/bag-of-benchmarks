@@ -44,10 +44,9 @@ size = nbytes // np.dtype(dtype).itemsize
 shape = (size,)
 
 comm = MPI.COMM_WORLD
-if comm.size != 1:
-    pprint()
-    pprint("Running %d parallel MPI processes: Results display collective performance")
-    pprint()
+pprint()
+pprint("Running %d parallel MPI processes: Results display collective performance" % comm.size)
+pprint()
 
 
 ##############################################################################
