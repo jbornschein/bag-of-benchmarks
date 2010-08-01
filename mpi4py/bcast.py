@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+from __future__ import division
+
+import sys
+sys.path.insert(0, "../pylib")
+
 from time import time
 from mpi4py import MPI
 from numpy.random import randn
