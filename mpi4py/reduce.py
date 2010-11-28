@@ -17,18 +17,19 @@ runs  = 20
 comm = MPI.COMM_WORLD
 
 
-pprint("Benchmarking braodcast performance on %d parallel MPI processes..." % comm.size)
+pprint("Benchmarking reduce performance on %d parallel MPI processes..." % comm.size)
 pprint()
 pprint("%15s | %12s | %12s" % 
     ("Size (bytes)", "Time (msec)", "Bandwidth (MiBytes/s)"))
 
 for s in sizes:
     data = np.ones(s)
+    res = np.empty_like(data)
 
     comm.Barrier()
     t0 = time()
     for i in xrange(runs):
-        comm.Bcast( [data, MPI.DOUBLE], 0)
+        comm.Reduce( [data, MPI.DOUBLE], [res, MPI.DOUBLE] ) 
     comm.Barrier()
     t = (time()-t0) / runs
     
