@@ -1,1 +1,3 @@
 *.pyc
+mpi/allreduce
+mpi/bcast
