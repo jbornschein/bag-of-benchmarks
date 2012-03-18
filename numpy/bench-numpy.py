@@ -153,7 +153,7 @@ if 'O2' in benches:
 
     o2_benchcodes = (
         ("x = np.inner(A, a)"    ,  2 ),
-        ("x = np.inner(A, b)"    ,  2 ),
+        ("x = np.inner(b, A)"    ,  2 ),
         ("X = np.inner(A, B)"    ,  3 ),
         ("X = np.dot(A, B)"      ,  3 ),
     )
@@ -169,8 +169,8 @@ if 'O2' in benches:
     pprint(" Input arrays a, and b are of dtype=%s, shape=%s"  % (dtype_str, str(shape1)))
     pprint(" Input arrays A, and B are of shape=%s"  % str(shape2))
     pprint()
-    pprint(" Code                      ||      GFLOP/s |")
-    pprint("---------------------------++--------------+")
+    pprint(" Code                      ||    Time [ms] |      GFLOP/s |")
+    pprint("---------------------------++--------------+--------------+")
 
     subs = {
         'SHAPE1'  : str(shape1),
@@ -183,5 +183,5 @@ if 'O2' in benches:
 
         gflops = comm.size * N**flopexp / t_np / 1e9
 
-        pprint(" %25s ||    %9.3f |" % (src, gflops))
+        pprint(" %25s ||    %9.3f |    %9.3f |" % (src, t_np*1e3, gflops))
 
