@@ -1,4 +1,4 @@
 #!/bin/sh
 
-THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32 exec ./bench-theano.py
+THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32 exec ./bench-theano.py $*
 

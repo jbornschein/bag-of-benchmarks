@@ -26,9 +26,9 @@ runs  = %(RUNS)s
 dtype = %(DTYPE)s
 shape = %(SHAPE)s
 
-a = 1*np.ones(shape, dtype)
-b = 2*np.ones(shape, dtype)
-c = 3*np.ones(shape, dtype)
+a = np.random.normal()*np.ones(shape, dtype)
+b = np.random.normal()*np.ones(shape, dtype)
+c = np.random.normal()*np.ones(shape, dtype)
 x = np.empty(shape, dtype)
 y = np.empty(shape, dtype)
 z = np.empty(shape, dtype)
@@ -185,6 +185,6 @@ if 'O1' in benches:
         gflops_th = comm.size * size * flopfac / t_th / 1e9
         membw_th = comm.size * nbytes * memfac / t_th / 1024 / 1024 /1024
 
-        print(" %25s ||    %8.2f |     %8.2f |    %8.2f |     %8.2f |  %8.2f |" % 
+        pprint(" %25s ||    %8.2f |     %8.2f |    %8.2f |     %8.2f |  %8.2f |" % 
             (code, gflops_np, membw_np, gflops_th, membw_th, speedup))
         
