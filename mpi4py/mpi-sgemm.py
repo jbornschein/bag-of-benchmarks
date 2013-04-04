@@ -58,19 +58,19 @@ if __name__ == "__main__":
     req = [None, None, None, None]
 
     t0 = time()
-    for r in xrange(mpi_rows):
+    for r in xrange(mpi_rows-1):
         req[EAST]  = ccomm.Isend(tile_A , neigh[EAST])
         req[WEST]  = ccomm.Irecv(tile_A_, neigh[WEST])
         req[SOUTH] = ccomm.Isend(tile_B , neigh[SOUTH])
         req[NORTH] = ccomm.Irecv(tile_B_, neigh[NORTH])
 
-        #t0 = time()
         my_C += np.dot(tile_A, tile_B)
-        #t1 = time()
 
         req[0].Waitall(req)
-        #t2 = time()
-        #print("Time computing %6.2f  %6.2f" % (t1-t0, t2-t1))
+
+    # Last iteration without comm
+    my_C += np.dot(tile_A, tile_B)
+
     comm.barrier()
     t_total = time()-t0
 
