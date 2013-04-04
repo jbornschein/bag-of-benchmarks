@@ -69,7 +69,7 @@ z = T.vector("z", dtype=dtype)
 
 %(CODE)s
 
-f = function([a,b,c], x)
+f = function([a,b,c], x, on_unused_input='ignore')
 
 # Run benchmark with compiled function
 
