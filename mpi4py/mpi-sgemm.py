@@ -8,8 +8,8 @@ from time import time
 
 #=============================================================================#
 
-my_N = 3000
-my_M = 3000
+my_N = 1000
+my_M = 1000
 
 #=============================================================================#
 
@@ -59,20 +59,27 @@ if __name__ == "__main__":
 
     t0 = time()
     for r in xrange(mpi_rows-1):
+        # Initialize tile shift communication
         req[EAST]  = ccomm.Isend(tile_A , neigh[EAST])
         req[WEST]  = ccomm.Irecv(tile_A_, neigh[WEST])
         req[SOUTH] = ccomm.Isend(tile_B , neigh[SOUTH])
         req[NORTH] = ccomm.Irecv(tile_B_, neigh[NORTH])
 
+        # Compute on current tile
         my_C += np.dot(tile_A, tile_B)
 
+        # Wait for communication to finish
         req[0].Waitall(req)
 
-    # Last iteration without comm
+        # Swap buffers
+        (tile_A, tile_A_) = (tile_A_, tile_A)
+        (tile_B, tile_B_) = (tile_B_, tile_B)
+
+    # Last iteration without communication
     my_C += np.dot(tile_A, tile_B)
 
-    comm.barrier()
     t_total = time()-t0
+    comm.barrier()
 
     t0 = time()
     np.dot(tile_A, tile_B)
