@@ -1,10 +1,23 @@
 #!/usr/bin/env python 
 
+"""
+
+Implementation of a MPI parallel A*B=C matrix-matrix multiplication.
+
+Each rank locally stores a tile of the matrices A, B and C;
+
+"""
+
 from __future__ import division
+
+import sys
+sys.path.insert(0, "../pylib")
 
 import numpy as np 
 from mpi4py import MPI
 from time import time
+
+from parutils import pprint
 
 #=============================================================================#
 
@@ -19,12 +32,6 @@ EAST = 2
 WEST = 3
 
 
-
-def pprint(string, comm=MPI.COMM_WORLD):
-    if comm.rank == 0:
-        print(string)
-
-
 if __name__ == "__main__":
     comm = MPI.COMM_WORLD
 
@@ -35,6 +42,8 @@ if __name__ == "__main__":
     if mpi_rows*mpi_cols > comm.size:
         mpi_rows -= 1
 
+    pprint("="*78 )
+    pprint("Running %d parallel processes (ranks)" % (comm.size) )
     pprint("Creating a %d x %d processor grid..." % (mpi_rows, mpi_cols) )
 
     ccomm = comm.Create_cart( (mpi_rows, mpi_cols), periods=(True, True), reorder=True)
