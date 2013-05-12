@@ -46,14 +46,15 @@ if __name__ == "__main__":
     pprint("Running %d parallel processes (ranks)" % (comm.size) )
     pprint("Creating a %d x %d processor grid..." % (mpi_rows, mpi_cols) )
 
+    # Create a 2d cartesian grid with periodic boundary conditions
     ccomm = comm.Create_cart( (mpi_rows, mpi_cols), periods=(True, True), reorder=True)
 
     my_mpi_row, my_mpi_col = ccomm.Get_coords( ccomm.rank ) 
-    neigh = [0,0,0,0]
     
+    # Identifiy our neighbours on the grid
+    neigh = [0,0,0,0]
     neigh[NORTH], neigh[SOUTH] = ccomm.Shift(0, 1)
     neigh[EAST],  neigh[WEST]  = ccomm.Shift(1, 1)
-
 
     # Create matrices
     my_A = np.random.normal(size=(my_N, my_M)).astype(np.float32)
@@ -68,7 +69,7 @@ if __name__ == "__main__":
 
     t0 = time()
     for r in xrange(mpi_rows-1):
-        # Initialize tile shift communication
+        # Initiate async. tile shift communication
         req[EAST]  = ccomm.Isend(tile_A , neigh[EAST])
         req[WEST]  = ccomm.Irecv(tile_A_, neigh[WEST])
         req[SOUTH] = ccomm.Isend(tile_B , neigh[SOUTH])
@@ -99,8 +100,6 @@ if __name__ == "__main__":
     pprint(" ... expecting parallel computation to take %6.2f seconds" % (mpi_rows*mpi_rows*mpi_cols*t_serial / comm.size))
     pprint("Computed (parallel) %d x %d x %d in        %6.2f seconds" % (mpi_rows*my_M, mpi_rows*my_M, mpi_cols*my_N, t_total))
     
-
-    #print "[%d] (%d,%d): %s" % (comm.rank, my_mpi_row, my_mpi_col, neigh)
 
     comm.barrier()
     
