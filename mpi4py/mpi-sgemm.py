@@ -90,10 +90,13 @@ if __name__ == "__main__":
 
     t_total = time()-t0
     comm.barrier()
-
-    t0 = time()
-    np.dot(tile_A, tile_B)
-    t_serial = time()-t0
+        
+    t_serial = 0.
+    if comm.rank == 0:
+        t0 = time()
+        np.dot(tile_A, tile_B)
+        t_serial = time()-t0
+    t_serial = comm.bcast(t_serial)
 
     pprint(78*"=")
     pprint("Computed (serial) %d x %d x %d in  %6.2f seconds" % (my_M, my_M, my_N, t_serial))
