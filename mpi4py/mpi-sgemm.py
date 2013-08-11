@@ -4,7 +4,8 @@
 
 Implementation of a MPI parallel A*B=C matrix-matrix multiplication.
 
-Each rank locally stores a tile of the matrices A, B and C;
+Each rank locally stores a tile of the matrices A, B and C; Communication 
+is overlayed with computation. 
 
 """
 
